@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="MauiBench.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MauiBench"
+    xmlns:pages="clr-namespace:MauiBench.Pages"
+    FlyoutBehavior="Disabled"
+    Title="MauiBench">
+
+    <TabBar>
+        <Tab x:Name="BenchmarkPage" Title="Benchmarks">
+            <ShellContent Title="Benchmarks" ContentTemplate="{DataTemplate pages:BenchmarkPage}" />
+        </Tab>
+        <Tab x:Name="ResultsPage" Title="Results">
+            <ShellContent Title="Results" ContentTemplate="{DataTemplate pages:ResultsPage}" />
+        </Tab>
+        <Tab x:Name="SystemInfo" Title="System Info">
+            <ShellContent Title="System Info" ContentTemplate="{DataTemplate pages:SystemInfo}" />
+        </Tab>
+    </TabBar>
+</Shell>
