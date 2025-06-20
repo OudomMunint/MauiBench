@@ -55,15 +55,19 @@ namespace MauiBench
                 Console.WriteLine("-----------------------------------------------------------");
 
                 string result = $"Hashing Benchmark: {stopwatch.ElapsedMilliseconds} ms";
-                Cleanup();
                 return result;
             }
 
-            public void Cleanup()
+            public void DisposeOf()
             {
-                N = 0;
-                data = new byte[N];
-                GC.Collect(); // Force GC (only in dev/test scenarios)
+                data = null;
+
+                sha256.Dispose();
+                sha512.Dispose();
+                md5.Dispose();
+
+                // These help if run immediately after disposing large allocations
+                GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
         }
