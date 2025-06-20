@@ -2,11 +2,120 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiBench.Pages.BenchmarkPage"
-             Shell.NavBarIsVisible="False">
-    <VerticalStackLayout>
-        <Label 
-            Text="Benchmark page"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="Black">
+
+    <ContentPage.Resources>
+        <Style TargetType="Border" x:Key="CustomBorder">
+            <Setter Property="BackgroundColor" Value="{StaticResource DarkGH}" />
+            <Setter Property="Stroke" Value="Transparent" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 15" />
+            <Setter Property="Padding" Value="10" />
+        </Style>
+
+        <Style TargetType="Button" x:Key="BenchmarkButton">
+            <Setter Property="Margin" Value="0,10,0,0" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="WidthRequest" Value="200" />
+        </Style>
+
+        <Style TargetType="Label" x:Key="DescLabel">
+            <Setter Property="LineBreakMode" Value="CharacterWrap" />
+            <Setter Property="LineHeight" Value="1.5" />
+            <Setter Property="HorizontalTextAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid Padding="20" RowSpacing="30" ColumnSpacing="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Hashing Benchmark -->
+        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CustomBorder}">
+            <ScrollView>
+                <VerticalStackLayout x:Name="HashingContainer" Spacing="10" Padding="10">
+                    <Label Text="Hashing Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Text="Run a hashing test to evaluate CPU cryptographic performance with MD5, SHA256 and SHA512 algorithms. This test stresses both CPU and Memory performance."
+                           Style="{StaticResource DescLabel}" />
+                    <Button Text="Start Benchmark" x:Name="HashingBenchmarkButton" Style="{StaticResource BenchmarkButton}" Clicked="HashingBenchmarkButton_Clicked"  />
+                    <Label x:Name="ResultsLabel" Style="{StaticResource DescLabel}" />
+                    <ActivityIndicator x:Name="HashingSpinner" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <!-- Encryption Benchmark -->
+        <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource CustomBorder}">
+            <ScrollView>
+                <VerticalStackLayout x:Name="EncryptionContainer" Spacing="10" Padding="10">
+                    <Label Text="Encryption Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Text="Run a large dataset encryption / decryption test to evaluate CPU performance. This test stresses both CPU and Memory performance. Memory capacity will likely be maxed out during this test."
+                           Style="{StaticResource DescLabel}" />
+                    <Button Text="Start Benchmark" x:Name="EncryptionBenchmarkButton" Style="{StaticResource BenchmarkButton}" />
+                    <ActivityIndicator x:Name="EncryptionSpinner" IsRunning="False" IsVisible="False" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <!-- Prime Number Benchmark -->
+        <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource CustomBorder}">
+            <ScrollView>
+                <VerticalStackLayout x:Name="PrimeContainer" Spacing="10" Padding="10">
+                    <Label Text="Prime Number Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Text="Run an intensive multithreaded CPU test that stresses the CPU's Integer ALUs to computes prime numbers. This test uses all available CPU threads."
+                           Style="{StaticResource DescLabel}" />
+                    <Button Text="Start Benchmark" x:Name="PrimeBenchmarkButton" Style="{StaticResource BenchmarkButton}" />
+                    <ActivityIndicator x:Name="PrimeSpinner" IsRunning="False" IsVisible="False" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <!-- Matrix Multiply Benchmark -->
+        <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource CustomBorder}">
+            <ScrollView>
+                <VerticalStackLayout x:Name="MatrixContainer" Spacing="10" Padding="10">
+                    <Label Text="Matrix Multiply Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Text="Run an intensive multithreaded CPU workload that multiplies two 2048 x 2048 matrices together, this stresses the CPU's Cache, FPU and SIMD units. This test uses all available CPU threads."
+                           Style="{StaticResource DescLabel}" />
+                    <Button Text="Start Benchmark" x:Name="MatrixBenchmarkButton" Style="{StaticResource BenchmarkButton}" />
+                    <ActivityIndicator x:Name="MatrixSpinner" IsRunning="False" IsVisible="False" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <!-- Memory Benchmark -->
+        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource CustomBorder}">
+            <ScrollView>
+                <VerticalStackLayout x:Name="MemoryContainer" Spacing="10" Padding="10">
+                    <Label Text="Memory Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Text="Run a memory bandwidth test, use this test to evaluate the CPU's multithreaded memory bandwidth throughput and memory latency. It reads and writes a 32GB block of data."
+                           Style="{StaticResource DescLabel}" />
+                    <Button Text="Start Benchmark" x:Name="MemoryBenchmarkButton" Style="{StaticResource BenchmarkButton}" />
+                    <ActivityIndicator x:Name="MemorySpinner" IsRunning="False" IsVisible="False" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <!-- All Benchmarks -->
+        <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource CustomBorder}">
+            <ScrollView>
+                <VerticalStackLayout x:Name="AllContainer" Spacing="10" Padding="10">
+                    <Label Text="All Benchmarks" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Text="Runs all available tests in sequence. This may take a while and your system may become unresponsive during some tests. It is recommended not to use your system during the benchmark."
+                           Style="{StaticResource DescLabel}" />
+                    <Button Text="Start All Benchmarks" x:Name="AllBenchmarkButton" Style="{StaticResource BenchmarkButton}" />
+                    <ActivityIndicator x:Name="AllSpinner" IsRunning="False" IsVisible="False" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+    </Grid>
 </ContentPage>
