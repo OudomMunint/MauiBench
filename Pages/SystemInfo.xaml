@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
-             x:Class="MauiBench.Pages.SystemInfo"
-             Shell.NavBarIsVisible="False"
-             BackgroundColor="Black">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MauiBench.Pages.SystemInfo" Shell.NavBarIsVisible="False"
+        BackgroundColor="Black">
 
     <ContentPage.Resources>
         <Style TargetType="Border" x:Key="CustomBorder">
@@ -13,5 +10,45 @@
             <Setter Property="Padding" Value="10" />
         </Style>
     </ContentPage.Resources>
-    
+
+    <Grid Padding="20" RowSpacing="30" ColumnSpacing="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- CPU Information Section -->
+        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CustomBorder}">
+            <ScrollView>
+                <VerticalStackLayout x:Name="CpuInfoContainer" Spacing="10">
+                    <Label Text="CPU Information" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <ActivityIndicator x:Name="CpuSpinner" IsRunning="True" VerticalOptions="Fill" HorizontalOptions="Fill" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <!-- Memory Information Section -->
+        <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource CustomBorder}">
+            <ScrollView>
+                <VerticalStackLayout x:Name="MemoryInfoContainer" Spacing="10">
+                    <Label Text="Memory Information" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <ActivityIndicator x:Name="MemSpinner" IsRunning="True" VerticalOptions="Fill" HorizontalOptions="Fill" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <!-- GPU Information Section -->
+        <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource CustomBorder}">
+            <ScrollView>
+                <VerticalStackLayout x:Name="GpuInfoContainer" Spacing="10">
+                    <Label Text="GPU Information" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <ActivityIndicator x:Name="GpuSpinner" IsRunning="True" VerticalOptions="Fill" HorizontalOptions="Fill" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+    </Grid>
 </ContentPage>
