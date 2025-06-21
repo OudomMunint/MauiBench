@@ -72,9 +72,9 @@
             <ScrollView>
                 <VerticalStackLayout x:Name="PrimeContainer" Spacing="10" Padding="10">
                     <Label Text="Prime Number Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
-                    <Label Text="Run an intensive multithreaded CPU test that stresses the CPU's Integer ALUs to computes prime numbers. This test uses all available CPU threads."
+                    <Label Text="Run an intensive multithreaded CPU test that stresses the CPU's Integer ALUs to compute prime numbers. This test uses all available CPU threads."
                            Style="{StaticResource DescLabel}" />
-                    <Button Text="Start Benchmark" x:Name="PrimeBenchmarkButton" Style="{StaticResource BenchmarkButton}" />
+                    <Button Text="Start Benchmark" x:Name="PrimeBenchmarkButton" Style="{StaticResource BenchmarkButton}" Clicked="PrimeBenchmarkButton_Clicked" />
                     <Label x:Name="PrimeResultsLabel" Style="{StaticResource DescLabel}" />
                     <ActivityIndicator x:Name="PrimeSpinner" IsRunning="False" IsVisible="False" />
                 </VerticalStackLayout>
@@ -88,7 +88,7 @@
                     <Label Text="Matrix Multiply Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
                     <Label Text="Run an intensive multithreaded CPU workload that multiplies two 2048 x 2048 matrices together, this stresses the CPU's Cache, FPU and SIMD units. This test uses all available CPU threads."
                            Style="{StaticResource DescLabel}" />
-                    <Button Text="Start Benchmark" x:Name="MatrixBenchmarkButton" Style="{StaticResource BenchmarkButton}" />
+                    <Button Text="Start Benchmark" x:Name="MatrixBenchmarkButton" Style="{StaticResource BenchmarkButton}" Clicked="MatrixBenchmarkButton_Clicked" />
                     <Label x:Name="MatrixResultsLabel" Style="{StaticResource DescLabel}" />
                     <ActivityIndicator x:Name="MatrixSpinner" IsRunning="False" IsVisible="False" />
                 </VerticalStackLayout>
@@ -102,7 +102,8 @@
                     <Label Text="Memory Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
                     <Label Text="Run a memory bandwidth test, use this test to evaluate the CPU's multithreaded memory bandwidth throughput and memory latency. It reads and writes a 32GB block of data."
                            Style="{StaticResource DescLabel}" />
-                    <Button Text="Start Benchmark" x:Name="MemoryBenchmarkButton" Style="{StaticResource BenchmarkButton}" />
+                    <Button Text="Start Benchmark" x:Name="MemoryBenchmarkButton" Style="{StaticResource BenchmarkButton}" Clicked="MemoryBenchmarkButton_Clicked" />
+                    <!--<Button Text="Singlethreaded memory test" x:Name="MemoryBenchmarkButton" Style="{StaticResource BenchmarkButton}" Clicked="MemoryBenchmarkButton_Clicked" />-->
                     <Label x:Name="MemoryResultsLabel" Style="{StaticResource DescLabel}" />
                     <ActivityIndicator x:Name="MemorySpinner" IsRunning="False" IsVisible="False" />
                 </VerticalStackLayout>
