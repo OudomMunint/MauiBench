@@ -29,8 +29,6 @@ public partial class BenchmarkPage : ContentPage
         HashingResultsLabel.Text = thisbenchmarkResults;
         HashingSpinner.IsRunning = false;
         HashingSpinner.IsVisible = false;
-
-        hashBenchmark?.DisposeOf();
     }
 
     private async void EncryptionBenchmarkButton_Clicked(object sender, EventArgs e)
@@ -50,7 +48,73 @@ public partial class BenchmarkPage : ContentPage
         EncryptionResultsLabel.Text = thisbenchmarkResults;
         EncryptionSpinner.IsRunning = false;
         EncryptionSpinner.IsVisible = false;
+    }
 
-        encBenchmark?.Dispose();
+    private async void PrimeBenchmarkButton_Clicked(object sender, EventArgs e)
+    {
+        PrimeSpinner.IsRunning = true;
+        PrimeSpinner.IsVisible = true;
+        string thisbenchmarkResults = "";
+        Benchmarks.CPUBenchmark? cpuBenchmark = null;
+
+        await Task.Run(() =>
+        {
+            cpuBenchmark = new Benchmarks.CPUBenchmark();
+            thisbenchmarkResults = cpuBenchmark.CpuPrimeCompute();
+        });
+
+        Results.Add(thisbenchmarkResults);
+        PrimeResultsLabel.Text = thisbenchmarkResults;
+        PrimeSpinner.IsRunning = false;
+        PrimeSpinner.IsVisible = false;
+    }
+
+    private async void MatrixBenchmarkButton_Clicked(object sender, EventArgs e)
+    {
+        MatrixSpinner.IsRunning = true;
+        MatrixSpinner.IsVisible = true;
+        string thisbenchmarkResults = "";
+        Benchmarks.MatrixMultiplicationBenchmark? matrixBenchmark = null;
+
+        await Task.Run(() =>
+        {
+            matrixBenchmark = new Benchmarks.MatrixMultiplicationBenchmark();
+            thisbenchmarkResults = matrixBenchmark.MultiplyMatrix();
+        });
+
+        Results.Add(thisbenchmarkResults);
+        MatrixResultsLabel.Text = thisbenchmarkResults;
+        MatrixSpinner.IsRunning = false;
+        MatrixSpinner.IsVisible = false;
+    }
+
+    private async void MemoryBenchmarkButton_Clicked(object sender, EventArgs e)
+    {
+        bool isST = false; // WIP
+
+        MemorySpinner.IsRunning = true;
+        MemorySpinner.IsVisible = true;
+        string thisbenchmarkResults = "";
+        Benchmarks.MemoryBenchmark? memoryBenchmark = null;
+
+        if (!isST)
+        {
+            await Task.Run(() => {
+                memoryBenchmark = new Benchmarks.MemoryBenchmark();
+                thisbenchmarkResults = memoryBenchmark.MTMemBandwidth();
+            });
+        }
+        else
+        {
+            await Task.Run(() => {
+                memoryBenchmark = new Benchmarks.MemoryBenchmark();
+                thisbenchmarkResults = memoryBenchmark.STMemBandwidth();
+            });
+        }
+
+        Results.Add(thisbenchmarkResults);
+        MemoryResultsLabel.Text = thisbenchmarkResults;
+        MemorySpinner.IsRunning = false;
+        MemorySpinner.IsVisible = false;
     }
 }
