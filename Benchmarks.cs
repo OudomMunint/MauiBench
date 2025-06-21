@@ -40,7 +40,6 @@ namespace MauiBench
 
             public string CombinedHashingExport()
             {
-                Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine($"Running Hash on SHA256, SHA512, MD5... Hashing {N / 1_000_000_000} GB...");
                 Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -49,10 +48,7 @@ namespace MauiBench
                 Md5();
 
                 stopwatch.Stop();
-                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine($"Hashing completed in {stopwatch.ElapsedMilliseconds} ms.");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("-----------------------------------------------------------");
 
                 string result = $"Hashing Benchmark: {stopwatch.ElapsedMilliseconds} ms";
                 return result;
@@ -72,25 +68,26 @@ namespace MauiBench
             }
         }
 
-        public class EncryptionBenchmark
+        public class EncryptionBenchmark : IDisposable
         {
             private readonly long TotalSize;
             private const int ChunkSize = 100_000_000; // 100MB per operation
             private int Iterations;
-            private readonly byte[] dataChunk;
+            private byte[]? dataChunk;
             private readonly byte[] key;
             private readonly byte[] iv;
             private readonly Aes aes;
+            private bool disposed = false;
 
             public EncryptionBenchmark()
             {
                 if (Debugger.IsAttached)
                 {
-                    TotalSize = 1L * 1_000_000_000; // 1GB
+                    TotalSize = 2L * 1_000_000_000; // 1GB
                 }
                 else
                 {
-                    TotalSize = 16L * 1_000_000_000; // 16GB
+                    TotalSize = 10L * 1_000_000_000; // 16GB
                 }
                 Iterations = (int)(TotalSize / ChunkSize);
                 aes = Aes.Create();
@@ -120,7 +117,6 @@ namespace MauiBench
             public string RunEncryptBenchmark()
             {
                 int threadCount = Environment.ProcessorCount;
-                Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine($"Running AES-256 Encryption... processing {TotalSize / 1_000_000_000} GB with {threadCount} threads...");
 
                 Stopwatch stopwatch = Stopwatch.StartNew();
@@ -135,13 +131,24 @@ namespace MauiBench
                 });
 
                 stopwatch.Stop();
-                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine($"Encryption completed in {stopwatch.ElapsedMilliseconds} ms.");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("-----------------------------------------------------------");
 
                 string result = $"Encryption Benchmark: {stopwatch.ElapsedMilliseconds} ms";
                 return result;
+            }
+
+            public void Dispose()
+            {
+                if (!disposed)
+                {
+                    aes.Dispose();
+                    dataChunk = null;
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
+
+                    disposed = true;
+                }
             }
         }
 
@@ -163,7 +170,6 @@ namespace MauiBench
                 int taskCount = Environment.ProcessorCount;
                 int iterationsPerThread = iterations / taskCount;
 
-                Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine($"Running Prime Compute with {taskCount} threads...");
 
                 var options = new ParallelOptions
@@ -179,10 +185,7 @@ namespace MauiBench
                 });
 
                 stopwatch.Stop();
-                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine($"Prime compute completed in {stopwatch.ElapsedMilliseconds} ms.");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("-----------------------------------------------------------");
 
                 string result = $"Prime Compute Benchmark: {stopwatch.ElapsedMilliseconds} ms";
                 return result;
@@ -246,7 +249,6 @@ namespace MauiBench
 
             public string MultiplyMatrix()
             {
-                Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine($"Running Matrix Multiplication with {Environment.ProcessorCount} threads...");
                 Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -269,10 +271,7 @@ namespace MauiBench
                 });
 
                 stopwatch.Stop();
-                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine($"Matrix multiplication completed in {stopwatch.ElapsedMilliseconds} ms.");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("-----------------------------------------------------------");
 
                 string benchResult = $"Matrix Multiplication Benchmark: {stopwatch.ElapsedMilliseconds} ms";
                 return benchResult;
@@ -284,9 +283,6 @@ namespace MauiBench
         {
             public static string MTMemBandwidth()
             {
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("Running Memory Bandwidth Benchmark...");
-
                 uint[] data = new uint[10000000 * 32];
                 List<(long Sum, double Bandwidth)> AllResults = new();
                 (long Sum, double Bandwidth) BestResult;
