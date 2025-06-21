@@ -1,12 +1,11 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MauiBench.Pages;
 
 public partial class BenchmarkPage : ContentPage
 {
     public List<string> Results { get; set; } = new List<string>();
-
-    int count = 0;
 
     public BenchmarkPage()
     {
@@ -27,10 +26,31 @@ public partial class BenchmarkPage : ContentPage
         });
 
         Results.Add(thisbenchmarkResults);
-        ResultsLabel.Text = thisbenchmarkResults;
+        HashingResultsLabel.Text = thisbenchmarkResults;
         HashingSpinner.IsRunning = false;
         HashingSpinner.IsVisible = false;
 
         hashBenchmark?.DisposeOf();
+    }
+
+    private async void EncryptionBenchmarkButton_Clicked(object sender, EventArgs e)
+    {
+        EncryptionSpinner.IsRunning = true;
+        EncryptionSpinner.IsVisible = true;
+        string thisbenchmarkResults = "";
+        Benchmarks.EncryptionBenchmark? encBenchmark = null;
+
+        await Task.Run(() =>
+        {
+            encBenchmark = new Benchmarks.EncryptionBenchmark();
+            thisbenchmarkResults = encBenchmark.RunEncryptBenchmark();
+        });
+
+        Results.Add(thisbenchmarkResults);
+        EncryptionResultsLabel.Text = thisbenchmarkResults;
+        EncryptionSpinner.IsRunning = false;
+        EncryptionSpinner.IsVisible = false;
+
+        encBenchmark?.Dispose();
     }
 }
