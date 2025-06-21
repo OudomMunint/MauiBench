@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace MauiBench
 {
     public class Benchmarks
     {
-        public class HashingBenchmark
+        public class HashingBenchmark : IDisposable
         {
             private int N;
             private byte[]? data;
@@ -50,34 +51,35 @@ namespace MauiBench
                 stopwatch.Stop();
                 Console.WriteLine($"Hashing completed in {stopwatch.ElapsedMilliseconds} ms.");
 
+                Dispose();
+
                 string result = $"Hashing Benchmark: {stopwatch.ElapsedMilliseconds} ms";
                 return result;
             }
 
-            public void DisposeOf()
+            public void Dispose()
             {
                 data = null;
-
+                N = 0;
                 sha256.Dispose();
                 sha512.Dispose();
                 md5.Dispose();
-
-                // These help if run immediately after disposing large allocations
-                GC.Collect();
+                GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
                 GC.WaitForPendingFinalizers();
+                GC.Collect();
             }
         }
 
         public class EncryptionBenchmark : IDisposable
         {
-            private readonly long TotalSize;
-            private const int ChunkSize = 100_000_000; // 100MB per operation
+            private long TotalSize;
+            private int ChunkSize = 100_000_000; // 100MB per operation
             private int Iterations;
             private byte[]? dataChunk;
-            private readonly byte[] key;
-            private readonly byte[] iv;
-            private readonly Aes aes;
-            private bool disposed = false;
+            private byte[] key;
+            private byte[] iv;
+            private Aes aes;
 
             public EncryptionBenchmark()
             {
@@ -133,28 +135,31 @@ namespace MauiBench
                 stopwatch.Stop();
                 Console.WriteLine($"Encryption completed in {stopwatch.ElapsedMilliseconds} ms.");
 
+                Dispose();
+
                 string result = $"Encryption Benchmark: {stopwatch.ElapsedMilliseconds} ms";
                 return result;
             }
 
             public void Dispose()
             {
-                if (!disposed)
-                {
-                    aes.Dispose();
-                    dataChunk = null;
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                    GC.Collect();
-
-                    disposed = true;
-                }
+                aes.Dispose();
+                aes.Clear();
+                dataChunk = null;
+                ChunkSize = 0;
+                key = [0];
+                iv = [0];
+                TotalSize = 0;
+                GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
             }
         }
 
-        class CPUBenchmark
+        public class CPUBenchmark
         {
-            public static string CpuPrimeCompute()
+            public string CpuPrimeCompute()
             {
                 int iterations;
 
@@ -215,7 +220,7 @@ namespace MauiBench
             }
         }
 
-        class MatrixMultiplicationBenchmark
+        public class MatrixMultiplicationBenchmark
         {
             private readonly int N; // Matrix size
             private readonly double[,] matrixA;
@@ -279,11 +284,11 @@ namespace MauiBench
         }
 
         // WIP
-        public class MemoryBenchmark
+        public class MemoryBenchmark : IDisposable
         {
-            public static string MTMemBandwidth()
+            public string MTMemBandwidth()
             {
-                uint[] data = new uint[10000000 * 32];
+                uint[]? data = new uint[10000000 * 32];
                 List<(long Sum, double Bandwidth)> AllResults = new();
                 (long Sum, double Bandwidth) BestResult;
 
@@ -314,6 +319,7 @@ namespace MauiBench
                     sw.Stop();
                     long dataSize = data.Length * 4;
                     double bandwidth = dataSize / sw.Elapsed.TotalSeconds / (1024 * 1024 * 1024);
+                    Dispose();
 
                     //Console.WriteLine("{1:0.000} GB/s", totalSum, bandwidth);
                     AllResults.Add((totalSum, bandwidth));
@@ -326,11 +332,12 @@ namespace MauiBench
                 return benchResult;
             }
 
-            public static string STMemBandwidth()
+            public string STMemBandwidth()
             {
                 List<(long Sum, double Bandwidth)> AllResults = new();
                 (long Sum, double Bandwidth) BestResult;
-                uint[] data = new uint[10000000 * 32];
+                uint[]? data = new uint[10000000 * 32];
+
                 for (int j = 0; j < 15; j++)
                 {
                     long totalSum = 0;
@@ -343,6 +350,8 @@ namespace MauiBench
                     sw.Stop();
                     long dataSize = data.Length * 4;
                     double bandwidth = dataSize / sw.Elapsed.TotalSeconds / (1024 * 1024 * 1024);
+                    Dispose();
+
                     Console.WriteLine("{0} {1:0.000} GB/s", sum, dataSize / sw.Elapsed.TotalSeconds / (1024 * 1024 * 1024));
                     AllResults.Add((totalSum, bandwidth));
                 }
@@ -352,6 +361,14 @@ namespace MauiBench
 
                 string benchResult = $"Memory Bandwidth: {BestResult.Sum} {BestResult.Bandwidth:0.000} GB/s";
                 return benchResult;
+            }
+
+            public void Dispose()
+            {
+                GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
             }
         }
     }
