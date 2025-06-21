@@ -116,10 +116,9 @@ public partial class SystemInfo : ContentPage
 
             if (manufacturer.ToLower().Contains("intel") || manufacturer.ToLower().Contains("amd"))
             {
-                AddGpuInfoItem("[Integrated GPU]", isHeader: true);
+                AddGpuInfoItem(manufacturer, isHeader: true);
                 AddGpuInfoItem($"Name: {item["Name"]}");
                 AddGpuInfoItem($"Manufacturer: {manufacturer}");
-                AddGpuInfoItem($"Driver Version: {item["DriverVersion"]}");
                 AddGpuInfoItem($"VRAM: {Convert.ToUInt64(item["AdapterRAM"]) / (1024 * 1024)} MB");
                 AddDivider();
             }
@@ -138,7 +137,7 @@ public partial class SystemInfo : ContentPage
                         using var adapter = factory.GetAdapter(0);
                         var desc = adapter.Description;
 
-                        AddGpuInfoItem("[Dedicated GPU]", isHeader: true);
+                        AddGpuInfoItem(manufacturer, isHeader: true);
                         AddGpuInfoItem($"Name: {desc.Description}");
                         AddGpuInfoItem($"Manufacturer: {manufacturer}");
                         AddGpuInfoItem($"Driver Version: {item["DriverVersion"]}");
@@ -202,7 +201,7 @@ public partial class SystemInfo : ContentPage
                     AddCpuInfoItem($"Base Clock: {item["MaxClockSpeed"]} MHz");
 
                     IHardwareInfo hardwareInfo = new HardwareInfo();
-                    hardwareInfo.RefreshAll();
+                    hardwareInfo.RefreshCPUList();
 
                     foreach (var cpu in hardwareInfo.CpuList)
                     {
