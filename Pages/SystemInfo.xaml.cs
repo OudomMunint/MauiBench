@@ -19,7 +19,7 @@ public partial class SystemInfo : ContentPage
     {
         base.OnNavigatedTo(args);
 
-        Task.Delay(1000).ContinueWith(_ =>
+        Task.Delay(500).ContinueWith(_ =>
         {
             MainThread.InvokeOnMainThreadAsync(() =>
             {
