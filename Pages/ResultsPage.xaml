@@ -1,12 +1,61 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:MauiBench.Models"
              x:Class="MauiBench.Pages.ResultsPage"
-             Shell.NavBarIsVisible="False">
-    <VerticalStackLayout>
-        <Label 
-            Text="Results Page"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="Black">
+
+    <ContentPage.Resources>
+        <Style TargetType="Border" x:Key="CustomBorder">
+            <Setter Property="BackgroundColor" Value="{StaticResource DarkGH}" />
+            <Setter Property="Stroke" Value="Transparent" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 15" />
+            <Setter Property="Padding" Value="10" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid Margin="30" RowSpacing="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Text="Your Results" VerticalOptions="Start" HorizontalOptions="Center" FontSize="Title" />
+
+        <SearchBar Grid.Row="1" Grid.Column="0" HorizontalOptions="Fill" BackgroundColor="{StaticResource DarkGH}" />
+        
+        <!--<HorizontalStackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="Fill" Spacing="15">
+            <Button x:Name="DeleteButton" Text="Delete All" HorizontalOptions="End" BackgroundColor="Red" Clicked="DeleteButton_Clicked" />
+        </HorizontalStackLayout>-->
+
+        <Border Grid.Row="2" Grid.Column="0" HorizontalOptions="Fill" VerticalOptions="Fill" Style="{StaticResource CustomBorder}">
+            <RefreshView>
+                <CollectionView x:Name="MainCollectionView" EmptyView="No benchmark data available. Please run some tests." BackgroundColor="{StaticResource DarkGH}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="15" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:BenchmarkModel">
+                            <Grid ColumnDefinitions="*, *, *, *" RowDefinitions="*, *" RowSpacing="5">
+                                <Label Text="{Binding Name}" Grid.Column="0" FontSize="18" FontAttributes="Bold" Margin="15,0,0,0" />
+
+                                <Label Text="{Binding Result}" Grid.Column="1" FontSize="18" HorizontalOptions="Center" />
+
+                                <Label Text="{Binding Timestamp}" Grid.Column="2" FontSize="12" TextColor="Gray" HorizontalOptions="Center" />
+
+                                <Label Text="{Binding BenchmarkType}" Grid.Column="3" FontSize="12" TextColor="Gray" HorizontalOptions="Center" />
+
+                                <BoxView HeightRequest="1" Grid.Row="1" Grid.ColumnSpan="4" Color="Grey" Margin="15, 10, 20, 0" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Border>
+    </Grid>
 </ContentPage>
