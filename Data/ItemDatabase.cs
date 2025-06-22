@@ -10,7 +10,7 @@ namespace MauiBench.Data
 {
     public class ItemDatabase
     {
-        static SQLiteAsyncConnection? Database;
+        static SQLiteAsyncConnection Database;
 
         public static readonly AsyncLazy<ItemDatabase> Instance =
             new AsyncLazy<ItemDatabase>(async () =>
@@ -35,6 +35,28 @@ namespace MauiBench.Data
         public ItemDatabase()
         {
             Database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
+        }
+
+        public Task<List<BenchmarkModel>> GetItemsAysnc()
+        {
+            return Database.Table<BenchmarkModel>().ToListAsync();
+        }
+
+        public Task<int> DeleteAllItemsAsync()
+        {
+            return Database.DeleteAllAsync<BenchmarkModel>();
+        }
+
+        public Task<int> SaveItemAsync(BenchmarkModel item)
+        {
+            if (item.Id != 0)
+            {
+                return Database.UpdateAsync(item);
+            }
+            else
+            {
+                return Database.InsertAsync(item);
+            }
         }
     }
 }
