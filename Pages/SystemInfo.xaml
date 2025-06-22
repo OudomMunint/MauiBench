@@ -28,8 +28,11 @@
         <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CustomBorder}">
             <ScrollView>
                 <VerticalStackLayout x:Name="CpuInfoContainer" Spacing="10">
-                    <Label Text="CPU Information" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
-                    <ActivityIndicator x:Name="CpuSpinner" IsRunning="True" VerticalOptions="Fill" HorizontalOptions="Fill" />
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                        <Image Source="cpu.png" Aspect="AspectFit" HeightRequest="25" WidthRequest="25" />
+                        <Label Text="CPU Information" FontSize="18" FontAttributes="Bold" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                        <ActivityIndicator x:Name="CpuSpinner" IsRunning="True" VerticalOptions="Fill" HorizontalOptions="Fill" />
                 </VerticalStackLayout>
             </ScrollView>
         </Border>
@@ -38,7 +41,10 @@
         <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource CustomBorder}">
             <ScrollView>
                 <VerticalStackLayout x:Name="MemoryInfoContainer" Spacing="10">
-                    <Label Text="Memory Information" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                        <Image Source="mem_slot.png" Aspect="AspectFit" HeightRequest="25" WidthRequest="25" />
+                        <Label Text="Memory Information" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    </HorizontalStackLayout>
                     <ActivityIndicator x:Name="MemSpinner" IsRunning="True" VerticalOptions="Fill" HorizontalOptions="Fill" />
                 </VerticalStackLayout>
             </ScrollView>
@@ -48,7 +54,10 @@
         <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource CustomBorder}">
             <ScrollView>
                 <VerticalStackLayout x:Name="GpuInfoContainer" Spacing="10">
-                    <Label Text="GPU Information" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                        <Image Source="gpu.png" Aspect="AspectFit" HeightRequest="25" WidthRequest="25" />
+                        <Label Text="GPU Information" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+                    </HorizontalStackLayout>
                     <ActivityIndicator x:Name="GpuSpinner" IsRunning="True" VerticalOptions="Fill" HorizontalOptions="Fill" />
                 </VerticalStackLayout>
             </ScrollView>
