@@ -23,7 +23,7 @@ namespace MauiBench
             {
                 if (Debugger.IsAttached)
                 {
-                    N = 1000000000;
+                    N = 500000000;
                 }
                 else
                 {
@@ -41,7 +41,7 @@ namespace MauiBench
 
             public string CombinedHashingExport()
             {
-                Console.WriteLine($"Running Hash on SHA256, SHA512, MD5... Hashing {N / 1_000_000_000} GB...");
+                System.Diagnostics.Debug.WriteLine($"Running Hash on SHA256, SHA512, MD5... Hashing {N / 1_000_000_000} GB...");
                 Stopwatch stopwatch = Stopwatch.StartNew();
 
                 Sha256();
@@ -49,11 +49,11 @@ namespace MauiBench
                 Md5();
 
                 stopwatch.Stop();
-                Console.WriteLine($"Hashing completed in {stopwatch.ElapsedMilliseconds} ms.");
+                System.Diagnostics.Debug.WriteLine($"Hashing completed in {stopwatch.ElapsedMilliseconds} ms.");
 
                 Dispose();
 
-                string result = $"Hashing Benchmark: {stopwatch.ElapsedMilliseconds} ms";
+                string result = $"Result: {stopwatch.ElapsedMilliseconds} ms";
                 return result;
             }
 
@@ -119,7 +119,7 @@ namespace MauiBench
             public string RunEncryptBenchmark()
             {
                 int threadCount = Environment.ProcessorCount;
-                Console.WriteLine($"Running AES-256 Encryption... processing {TotalSize / 1_000_000_000} GB with {threadCount} threads...");
+                System.Diagnostics.Debug.WriteLine($"Running AES-256 Encryption... processing {TotalSize / 1_000_000_000} GB with {threadCount} threads...");
 
                 Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -133,11 +133,11 @@ namespace MauiBench
                 });
 
                 stopwatch.Stop();
-                Console.WriteLine($"Encryption completed in {stopwatch.ElapsedMilliseconds} ms.");
+                System.Diagnostics.Debug.WriteLine($"Encryption completed in {stopwatch.ElapsedMilliseconds} ms.");
 
                 Dispose();
 
-                string result = $"Encryption Benchmark: {stopwatch.ElapsedMilliseconds} ms";
+                string result = $"Result: {stopwatch.ElapsedMilliseconds} ms";
                 return result;
             }
 
@@ -175,7 +175,7 @@ namespace MauiBench
                 int taskCount = Environment.ProcessorCount;
                 int iterationsPerThread = iterations / taskCount;
 
-                Console.WriteLine($"Running Prime Compute with {taskCount} threads...");
+                System.Diagnostics.Debug.WriteLine($"Running Prime Compute with {taskCount} threads...");
 
                 var options = new ParallelOptions
                 {
@@ -190,9 +190,9 @@ namespace MauiBench
                 });
 
                 stopwatch.Stop();
-                Console.WriteLine($"Prime compute completed in {stopwatch.ElapsedMilliseconds} ms.");
+                System.Diagnostics.Debug.WriteLine($"Prime compute completed in {stopwatch.ElapsedMilliseconds} ms.");
 
-                string result = $"Prime Compute Benchmark: {stopwatch.ElapsedMilliseconds} ms";
+                string result = $"Result: {stopwatch.ElapsedMilliseconds} ms";
                 return result;
             }
 
@@ -254,7 +254,7 @@ namespace MauiBench
 
             public string MultiplyMatrix()
             {
-                Console.WriteLine($"Running Matrix Multiplication with {Environment.ProcessorCount} threads...");
+                System.Diagnostics.Debug.WriteLine($"Running Matrix Multiplication with {Environment.ProcessorCount} threads...");
                 Stopwatch stopwatch = Stopwatch.StartNew();
 
                 var options = new ParallelOptions
@@ -276,9 +276,9 @@ namespace MauiBench
                 });
 
                 stopwatch.Stop();
-                Console.WriteLine($"Matrix multiplication completed in {stopwatch.ElapsedMilliseconds} ms.");
+                System.Diagnostics.Debug.WriteLine($"Matrix multiplication completed in {stopwatch.ElapsedMilliseconds} ms.");
 
-                string benchResult = $"Matrix Multiplication Benchmark: {stopwatch.ElapsedMilliseconds} ms";
+                string benchResult = $"Result: {stopwatch.ElapsedMilliseconds} ms";
                 return benchResult;
             }
         }
@@ -321,45 +321,14 @@ namespace MauiBench
                     double bandwidth = dataSize / sw.Elapsed.TotalSeconds / (1024 * 1024 * 1024);
                     Dispose();
 
-                    //Console.WriteLine("{1:0.000} GB/s", totalSum, bandwidth);
+                    //System.Diagnostics.Debug.WriteLine("{1:0.000} GB/s", totalSum, bandwidth);
                     AllResults.Add((totalSum, bandwidth));
                 }
 
                 BestResult = AllResults.OrderByDescending(x => x.Bandwidth).First(); // Sort for highest
-                Console.WriteLine($"Memory Bandwidth: {BestResult.Bandwidth:0.000} GB/s");
+                System.Diagnostics.Debug.WriteLine($"Memory Bandwidth: {BestResult.Bandwidth:0.000} GB/s");
 
-                string benchResult = $"Memory Bandwidth: {BestResult.Bandwidth:0.000} GB/s";
-                return benchResult;
-            }
-
-            public string STMemBandwidth()
-            {
-                List<(long Sum, double Bandwidth)> AllResults = new();
-                (long Sum, double Bandwidth) BestResult;
-                uint[]? data = new uint[10000000 * 32];
-
-                for (int j = 0; j < 15; j++)
-                {
-                    long totalSum = 0;
-                    uint sum = 0;
-                    var sw = Stopwatch.StartNew();
-                    for (uint i = 0; i < data.Length; i += 64)
-                    {
-                        sum += data[i] + data[i + 16] + data[i + 32] + data[i + 48];
-                    }
-                    sw.Stop();
-                    long dataSize = data.Length * 4;
-                    double bandwidth = dataSize / sw.Elapsed.TotalSeconds / (1024 * 1024 * 1024);
-                    Dispose();
-
-                    Console.WriteLine("{0} {1:0.000} GB/s", sum, dataSize / sw.Elapsed.TotalSeconds / (1024 * 1024 * 1024));
-                    AllResults.Add((totalSum, bandwidth));
-                }
-
-                BestResult = AllResults.OrderByDescending(x => x.Bandwidth).First(); // Sort for highest
-                Console.WriteLine($"Memory Bandwidth: {BestResult.Sum} {BestResult.Bandwidth:0.000} GB/s");
-
-                string benchResult = $"Memory Bandwidth: {BestResult.Sum} {BestResult.Bandwidth:0.000} GB/s";
+                string benchResult = $"Result: {BestResult.Bandwidth:0.000} GB/s";
                 return benchResult;
             }
 
