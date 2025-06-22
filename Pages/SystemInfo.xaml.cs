@@ -10,6 +10,12 @@ namespace MauiBench.Pages;
 
 public partial class SystemInfo : ContentPage
 {
+    private bool HasCpuSpecsBeenGathered = false;
+
+    private bool HasGpuSpecsBeenGathered = false;
+
+    private bool HasMemorySpecsBeenGathered = false;
+
     public SystemInfo()
     {
         InitializeComponent();
@@ -36,22 +42,20 @@ public partial class SystemInfo : ContentPage
         });
     }
 
-    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
-    {
-        base.OnNavigatedFrom(args);
-        GpuInfoContainer.Clear();
-        CpuInfoContainer.Clear();
-        MemoryInfoContainer.Clear();
-    }
-
     private void GetGpuInfo()
     {
+        if (HasGpuSpecsBeenGathered)
+        {
+            return;
+        }
+
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             AddGpuInfoItem("GPU Information not available on this platform", isHeader: true);
             return;
         }
 
+        HasGpuSpecsBeenGathered = true;
         using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController");
         bool hasNvidiaGPU = false;
 
@@ -165,6 +169,11 @@ public partial class SystemInfo : ContentPage
 
     private void GetCpuInfo()
     {
+        if (HasCpuSpecsBeenGathered)
+        {
+            return;
+        }
+
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             AddCpuInfoItem("CPU Information not available on this platform", isHeader: true);
@@ -173,6 +182,7 @@ public partial class SystemInfo : ContentPage
 
         try
         {
+            HasCpuSpecsBeenGathered = true;
             using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor");
             foreach (var item in searcher.Get())
             {
@@ -230,6 +240,11 @@ public partial class SystemInfo : ContentPage
 
     private void GetMemoryInfo()
     {
+        if (HasMemorySpecsBeenGathered)
+        {
+            return;
+        }
+
         // Only supported on Windows
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
@@ -239,6 +254,7 @@ public partial class SystemInfo : ContentPage
 
         try
         {
+            HasMemorySpecsBeenGathered = true;
             // Query physical memory modules
             using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PhysicalMemory");
             var modules = searcher.Get().Cast<ManagementObject>().ToList();
