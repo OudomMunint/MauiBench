@@ -1,5 +1,13 @@
 ﻿# MauiBench (.NET 9)
-### A .Net MAUI applucation that evaluates CPU bound performance & provides information about your CPU, GPU, RAM.
+### A .Net MAUI application that evaluates CPU performance & provides information about your CPU, GPU, RAM.
+
+## ❌ macOS Support Notice
+
+> **macOS (MAUI/Catalyst) is not currently supported.**  
+>
+> This application relies on high-performance compute workloads using `.NET` SIMD (`System.Numerics.Vector<T>`) and multithreaded processing.  
+> While Windows and Linux builds use **CoreCLR** (with full JIT-optimized NEON/AVX2 + FMA support), the macOS MAUI host runs on **Mono/AOT**, which does **not** JIT-compile SIMD code down to hardware instructions.  
+> This results in severe performance degradation on both Intel-based and Apple Silicon (ARM64) Macs.
 
 # Test suite
 - 🔢 Integer Performance – Prime number computation.
@@ -82,6 +90,13 @@ Windows 11
 - Windows 10 or MacOS 14
 - 8GB RAM
 - 1GB Storage
+
+### Supported Platforms
+- **Windows 10/11** (x64, .NET 9 or later)  
+- **Linux** (x64/ARM64, .NET 9 or later)
+
+### Unsupported Platforms
+- **macOS x64 & arm64 (MAUI/Catalyst)**
 
 # Screenshots
 <img src="Media/benchscreen.png"/>
