@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Runtime;
 using System.Security.Cryptography;
 using System.Text;
@@ -299,6 +300,71 @@ namespace MauiBench
                 double score = 6700.0 / stopwatch.ElapsedMilliseconds * 100;
                 string benchResult = $"Result: {score:F2} points";
                 return benchResult;
+            }
+        }
+
+        // WIP - MMUL with SIMD
+        public class MatrixMultiplicationBenchmarkSIMD
+        {
+            private readonly int N;
+            private readonly int VectorSize;
+            private readonly double[] matrixA;
+            private readonly double[] matrixB_T;
+            private readonly double[] result;
+
+            public MatrixMultiplicationBenchmarkSIMD()
+            {
+                N = Debugger.IsAttached ? 1024 : 2048;
+                VectorSize = 2; // usually 2 (128-bit) or 4 (256-bit)
+
+                // Pad N to next multiple of VectorSize
+                if (N % VectorSize != 0)
+                    N += VectorSize - (N % VectorSize);
+
+                matrixA = new double[N * N];
+                matrixB_T = new double[N * N];
+                result = new double[N * N];
+
+                var random = new Random(42);
+                for (int i = 0; i < N; i++)
+                {
+                    for (int j = 0; j < N; j++)
+                    {
+                        double value = random.NextDouble() * 100;
+                        matrixA[i * N + j] = value;
+                        matrixB_T[j * N + i] = value; // Transposed for cache-friendly SIMD
+                    }
+                }
+            }
+
+            public string MultiplyMatrix()
+            {
+                System.Diagnostics.Debug.WriteLine($"Running SIMD MMUL with N={N} and VectorSize={VectorSize}, Threads={Environment.ProcessorCount}...");
+                Stopwatch stopwatch = Stopwatch.StartNew();
+
+                Parallel.For(0, N, i =>
+                {
+                    for (int j = 0; j < N; j++)
+                    {
+                        double sum = 0;
+
+                        int k = 0;
+                        for (; k <= N - VectorSize; k += VectorSize)
+                        {
+                            var va = new Vector<double>(matrixA, i * N + k);
+                            var vb = new Vector<double>(matrixB_T, j * N + k);
+                            sum += Vector.Dot(va, vb);
+                        }
+
+                        result[i * N + j] = sum;
+                    }
+                });
+
+                stopwatch.Stop();
+                System.Diagnostics.Debug.WriteLine($"SIMD MMUL completed in {stopwatch.ElapsedMilliseconds} ms.");
+
+                double score = 6700.0 / stopwatch.ElapsedMilliseconds * 100;
+                return $"Result: {score:F2} points";
             }
         }
 
