@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MauiBench.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -66,18 +67,7 @@ namespace MauiBench
                 sha256.Dispose();
                 sha512.Dispose();
                 md5.Dispose();
-                
-                if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
-                {
-                    GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
-                }
-                else
-                {
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
-                }
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
+                GCHelper.CleanUp();
             }
         }
 
@@ -161,17 +151,7 @@ namespace MauiBench
                 key = [0];
                 iv = [0];
                 TotalSize = 0;
-                if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
-                {
-                    GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
-                }
-                else
-                {
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
-                }
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
+                GCHelper.CleanUp();
             }
         }
 
@@ -419,17 +399,7 @@ namespace MauiBench
 
             public void Dispose()
             {
-                if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
-                {
-                    GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
-                }
-                else
-                {
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
-                }
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
+                GCHelper.CleanUp();
             }
         }
     }
