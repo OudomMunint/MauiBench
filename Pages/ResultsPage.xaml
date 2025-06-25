@@ -25,14 +25,13 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Text="Your Results" VerticalOptions="Start" HorizontalOptions="Center" FontSize="Title" />
+        <HorizontalStackLayout Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" Spacing="15">
+            <Label Text="Your Results" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Title" />
+            <Button x:Name="DeleteButton" Text="Delete all" BackgroundColor="Red" TextColor="White" Clicked="DeleteButton_Clicked" />
+        </HorizontalStackLayout>
 
         <SearchBar Grid.Row="1" Grid.Column="0" HorizontalOptions="Fill" BackgroundColor="{StaticResource DarkGH}" />
         
-        <!--<HorizontalStackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="Fill" Spacing="15">
-            <Button x:Name="DeleteButton" Text="Delete All" HorizontalOptions="End" BackgroundColor="Red" Clicked="DeleteButton_Clicked" />
-        </HorizontalStackLayout>-->
-
         <Border Grid.Row="2" Grid.Column="0" HorizontalOptions="Fill" VerticalOptions="Fill" Style="{StaticResource CustomBorder}">
             <RefreshView>
                 <CollectionView x:Name="MainCollectionView" EmptyView="No benchmark data available. Please run some tests." BackgroundColor="{StaticResource DarkGH}">
