@@ -103,7 +103,6 @@
                     <Label Text="Run a memory bandwidth test, use this test to evaluate the CPU's multithreaded memory bandwidth throughput and memory latency. It reads and writes a 32GB block of data."
                            Style="{StaticResource DescLabel}" />
                     <Button Text="Start Benchmark" x:Name="MemoryBenchmarkButton" Style="{StaticResource BenchmarkButton}" Clicked="MemoryBenchmarkButton_Clicked" />
-                    <!--<Button Text="Singlethreaded memory test" x:Name="MemoryBenchmarkButton" Style="{StaticResource BenchmarkButton}" Clicked="MemoryBenchmarkButton_Clicked" />-->
                     <Label x:Name="MemoryResultsLabel" Style="{StaticResource DescLabel}" />
                     <ActivityIndicator x:Name="MemorySpinner" IsRunning="False" IsVisible="False" />
                 </VerticalStackLayout>
@@ -117,7 +116,8 @@
                     <Label Text="All Benchmarks" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
                     <Label Text="Runs all available tests in sequence. This may take a while and your system may become unresponsive during some tests. It is recommended not to use your system during the benchmark."
                            Style="{StaticResource DescLabel}" />
-                    <Button Text="Start All Benchmarks" x:Name="AllBenchmarkButton" Style="{StaticResource BenchmarkButton}" />
+                    <Button Text="Start All Benchmarks" x:Name="AllBenchmarkButton" Style="{StaticResource BenchmarkButton}" Clicked="AllBenchmarkButton_Clicked" />
+                    <Label x:Name="AllResultsLabel" Style="{StaticResource DescLabel}" />
                     <ActivityIndicator x:Name="AllSpinner" IsRunning="False" IsVisible="False" />
                 </VerticalStackLayout>
             </ScrollView>
