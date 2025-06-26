@@ -41,7 +41,16 @@ namespace MauiBench.Models
 
         public Type BenchmarkType { get; set; }
 
-        public string? Result { get; set; }
+        public int? Result { get; set; }
+
+        public string FormattedResult
+        {
+            get
+            {
+                return Result.HasValue ? $"{Result.Value} points" : string.Empty;
+            }
+        }
+        public string? BandwidthResult { get; set; }
 
         public TestName TestNameValue { get; set; }
 
