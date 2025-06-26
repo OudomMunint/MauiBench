@@ -7,7 +7,7 @@ namespace MauiBench.Pages;
 
 public partial class BenchmarkPage : ContentPage
 {
-    public List<string> Results { get; set; } = new List<string>();
+    public List<int> Results { get; set; } = new List<int>();
 
     public ItemDatabase database;
 
@@ -34,7 +34,7 @@ public partial class BenchmarkPage : ContentPage
         HashingSpinner.IsRunning = true;
         HashingSpinner.IsVisible = true;
 
-        string thisbenchmarkResults = "";
+        var thisbenchmarkResults = 0;
         Benchmarks.HashingBenchmark? hashBenchmark = null;
 
         await Task.Run(() =>
@@ -44,7 +44,7 @@ public partial class BenchmarkPage : ContentPage
         });
 
         Results.Add(thisbenchmarkResults);
-        HashingResultsLabel.Text = thisbenchmarkResults;
+        HashingResultsLabel.Text = $"{thisbenchmarkResults} points";
         HashingSpinner.IsRunning = false;
         HashingSpinner.IsVisible = false;
 
@@ -75,7 +75,7 @@ public partial class BenchmarkPage : ContentPage
         EncryptionSpinner.IsRunning = true;
         EncryptionSpinner.IsVisible = true;
 
-        string thisbenchmarkResults = "";
+        var thisbenchmarkResults = 0;
         Benchmarks.EncryptionBenchmark? encBenchmark = null;
 
         await Task.Run(() =>
@@ -85,7 +85,7 @@ public partial class BenchmarkPage : ContentPage
         });
 
         Results.Add(thisbenchmarkResults);
-        EncryptionResultsLabel.Text = thisbenchmarkResults;
+        EncryptionResultsLabel.Text = $"{thisbenchmarkResults} points";
         EncryptionSpinner.IsRunning = false;
         EncryptionSpinner.IsVisible = false;
 
@@ -116,7 +116,7 @@ public partial class BenchmarkPage : ContentPage
         PrimeSpinner.IsRunning = true;
         PrimeSpinner.IsVisible = true;
 
-        string thisbenchmarkResults = "";
+        var thisbenchmarkResults = 0;
         Benchmarks.CPUBenchmark? cpuBenchmark = null;
 
         await Task.Run(() =>
@@ -126,7 +126,7 @@ public partial class BenchmarkPage : ContentPage
         });
 
         Results.Add(thisbenchmarkResults);
-        PrimeResultsLabel.Text = thisbenchmarkResults;
+        PrimeResultsLabel.Text = $"{thisbenchmarkResults} points";
         PrimeSpinner.IsRunning = false;
         PrimeSpinner.IsVisible = false;
 
@@ -157,7 +157,7 @@ public partial class BenchmarkPage : ContentPage
         MatrixSpinner.IsRunning = true;
         MatrixSpinner.IsVisible = true;
 
-        string thisbenchmarkResults = "";
+        var thisbenchmarkResults = 0;
         Benchmarks.MatrixMultiplicationBenchmark? matrixBenchmark = null;
 
         await Task.Run(() =>
@@ -167,7 +167,7 @@ public partial class BenchmarkPage : ContentPage
         });
 
         Results.Add(thisbenchmarkResults);
-        MatrixResultsLabel.Text = thisbenchmarkResults;
+        MatrixResultsLabel.Text = $"{thisbenchmarkResults} points";
         MatrixSpinner.IsRunning = false;
         MatrixSpinner.IsVisible = false;
 
@@ -206,7 +206,7 @@ public partial class BenchmarkPage : ContentPage
             thisbenchmarkResults = memoryBenchmark.MTMemBandwidth();
         });
 
-        Results.Add(thisbenchmarkResults);
+        //Results.Add(thisbenchmarkResults);
         MemoryResultsLabel.Text = thisbenchmarkResults;
         MemorySpinner.IsRunning = false;
         MemorySpinner.IsVisible = false;
