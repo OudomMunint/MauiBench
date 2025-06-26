@@ -222,6 +222,45 @@ public partial class BenchmarkPage : ContentPage
             Timestamp = DateTime.Now,
             TestNameValue = BenchmarkModel.TestName.MemoryBandwidth,
             BenchmarkType = BenchmarkModel.Type.Partial,
+            BandwidthResult = thisbenchmarkResults
+        });
+    }
+
+    private async void AllBenchmarkButton_Clicked(object sender, EventArgs e)
+    {
+        Button? button = sender as Button;
+        if (button != null)
+        {
+            button.IsEnabled = false;
+            button.Text = "Running All benchmarks...";
+        }
+
+        AllSpinner.IsRunning = true;
+        AllSpinner.IsVisible = true;
+        var thisbenchmarkResults = 0;
+
+        Benchmarks.CombinedBenchmark? combinedBenchmark = null;
+
+        await Task.Run(() =>
+        {
+            combinedBenchmark = new Benchmarks.CombinedBenchmark();
+            thisbenchmarkResults = (int)combinedBenchmark.RunAllBenchmarks();
+        });
+
+        Results.Add(thisbenchmarkResults);
+        AllResultsLabel.Text = $"{thisbenchmarkResults} points";
+        AllSpinner.IsRunning = false;
+        AllSpinner.IsVisible = false;
+        if (button != null)
+        {
+            button.IsEnabled = true;
+            button.Text = "Start Benchmark";
+        }
+        await database.SaveItemAsync(new BenchmarkModel
+        {
+            Timestamp = DateTime.Now,
+            TestNameValue = BenchmarkModel.TestName.Full,
+            BenchmarkType = BenchmarkModel.Type.Full,
             Result = thisbenchmarkResults
         });
     }
