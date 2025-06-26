@@ -30,7 +30,8 @@
             <Button x:Name="DeleteButton" Text="Delete all" BackgroundColor="Red" TextColor="White" Clicked="DeleteButton_Clicked" />
         </HorizontalStackLayout>
 
-        <SearchBar Grid.Row="1" Grid.Column="0" HorizontalOptions="Fill" BackgroundColor="{StaticResource DarkGH}" />
+        <SearchBar x:Name="MainSearchBar" Grid.Row="1" Grid.Column="0" HorizontalOptions="Fill" BackgroundColor="{StaticResource DarkGH}"
+                    TextChanged="OnSearchAsync"/>
         
         <Border Grid.Row="2" Grid.Column="0" HorizontalOptions="Fill" VerticalOptions="Fill" Style="{StaticResource CustomBorder}">
             <RefreshView>
@@ -43,7 +44,8 @@
                             <Grid ColumnDefinitions="*, *, *, *" RowDefinitions="*, *" RowSpacing="5">
                                 <Label Text="{Binding Name}" Grid.Column="0" FontSize="18" FontAttributes="Bold" Margin="15,0,0,0" />
 
-                                <Label Text="{Binding Result}" Grid.Column="1" FontSize="18" HorizontalOptions="Center" />
+                                <Label Text="{Binding FormattedResult}" Grid.Column="1" FontSize="18" HorizontalOptions="Center" />
+                                <Label Text="{Binding BandwidthResult}" Grid.Column="1" FontSize="18" HorizontalOptions="Center"/>
 
                                 <Label Text="{Binding Timestamp}" Grid.Column="2" FontSize="12" TextColor="Gray" HorizontalOptions="Center" />
 

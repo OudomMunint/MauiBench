@@ -1,4 +1,5 @@
 using MauiBench.Data;
+using MauiBench.Models;
 
 namespace MauiBench.Pages;
 
@@ -26,7 +27,7 @@ public partial class ResultsPage : ContentPage
         {
             var timestamp = DateTime.Now.AddMinutes(-random.Next(0, 600)); // Last 10 hours
             var testNameValues = Enum.GetValues(typeof(Models.BenchmarkModel.TestName));
-            var result = $"Result {random.Next(1, 1000)}";
+            int result = random.Next(0, 1000); // Simulated result value
 
             var benchmarkTypeValues = Enum.GetValues(typeof(Models.BenchmarkModel.Type));
             var benchmarkType = (Models.BenchmarkModel.Type)benchmarkTypeValues.GetValue(random.Next(benchmarkTypeValues.Length))!;
@@ -53,5 +54,35 @@ public partial class ResultsPage : ContentPage
             var items = await database.GetItemsAysnc();
             MainCollectionView.ItemsSource = items;
         }
+    }
+
+    private async void OnSearchAsync(object sender, TextChangedEventArgs e)
+    {
+        //if (MainCollectionView.ItemsSource is not null)
+        //{
+        //    var searchText = e.NewTextValue?.ToLowerInvariant() ?? string.Empty;
+        //    MainCollectionView.ItemsSource = ((List<Models.BenchmarkModel>)MainCollectionView.ItemsSource)
+        //        .Where(item => item.TestNameValue.ToString().ToLowerInvariant().Contains(searchText))
+        //        .ToList();
+        //}
+
+        var keyword = MainSearchBar.Text.ToLower();
+
+        if (string.IsNullOrWhiteSpace(keyword))
+        {
+            MainCollectionView.ItemsSource = ((IEnumerable<BenchmarkModel>)MainCollectionView.ItemsSource).ToList();
+            await UpdateCollectionView();
+        }
+        else
+        {
+            var filteredItems = ((IEnumerable<BenchmarkModel>)MainCollectionView.ItemsSource).Where(item => item.Name.ToLower().Contains(keyword));
+            MainCollectionView.ItemsSource = filteredItems.ToList();
+        }
+    }
+
+    private async Task UpdateCollectionView()
+    {
+        ItemDatabase database = await ItemDatabase.Instance;
+        MainCollectionView.ItemsSource = await database.GetItemsAysnc();
     }
 }
