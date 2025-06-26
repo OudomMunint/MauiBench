@@ -9,7 +9,7 @@ public partial class BenchmarkPage : ContentPage
 {
     public List<int> Results { get; set; } = new List<int>();
 
-    public ItemDatabase database;
+    public ItemDatabase database { get; private set; } = null!;
 
     public BenchmarkPage()
     {

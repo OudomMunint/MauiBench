@@ -35,11 +35,32 @@ namespace MauiBench
                 new Random(42).NextBytes(data);
             }
 
-            public byte[] Sha256() => sha256.ComputeHash(data);
+            public byte[] Sha256()
+            {
+                if (data == null)
+                {
+                    throw new InvalidOperationException("Data buffer is not initialized.");
+                }
+                return sha256.ComputeHash(data);
+            }
 
-            public byte[] Sha512() => sha512.ComputeHash(data);
+            public byte[] Sha512()
+            {
+                if (data == null)
+                {
+                    throw new InvalidOperationException("Data buffer is not initialized.");
+                }
+                return sha512.ComputeHash(data);
+            }
 
-            public byte[] Md5() => md5.ComputeHash(data);
+            public byte[] Md5()
+            {
+                if (data == null)
+                {
+                    throw new InvalidOperationException("Data buffer is not initialized.");
+                }
+                return md5.ComputeHash(data);
+            }
 
             public int CombinedHashingExport()
             {
@@ -106,18 +127,33 @@ namespace MauiBench
 
             public byte[] AesEncrypt(byte[] data)
             {
+                if (data == null)
+                {
+                    throw new ArgumentNullException(nameof(data), "Data cannot be null.");
+                }
+
                 using var encryptor = aes.CreateEncryptor(key, iv);
                 return encryptor.TransformFinalBlock(data, 0, data.Length);
             }
 
             public byte[] AesDecrypt(byte[] encryptedData)
             {
+                if (encryptedData == null)
+                {
+                    throw new ArgumentNullException(nameof(encryptedData), "Encrypted data cannot be null.");
+                }
+
                 using var decryptor = aes.CreateDecryptor(key, iv);
                 return decryptor.TransformFinalBlock(encryptedData, 0, encryptedData.Length);
             }
 
             public int RunEncryptBenchmark()
             {
+                if (dataChunk == null)
+                {
+                    throw new InvalidOperationException("Data chunk is not initialized.");
+                }
+
                 int threadCount = Environment.ProcessorCount;
                 System.Diagnostics.Debug.WriteLine($"Running AES-256 Encryption... processing {TotalSize / 1_000_000_000} GB with {threadCount} threads...");
 
@@ -148,8 +184,8 @@ namespace MauiBench
                 aes.Clear();
                 dataChunk = null;
                 ChunkSize = 0;
-                key = [0];
-                iv = [0];
+                key = Array.Empty<byte>();
+                iv = Array.Empty<byte>();
                 TotalSize = 0;
                 GCHelper.CleanUp();
             }
