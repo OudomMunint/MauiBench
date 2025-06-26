@@ -41,7 +41,7 @@ namespace MauiBench
 
             public byte[] Md5() => md5.ComputeHash(data);
 
-            public string CombinedHashingExport()
+            public int CombinedHashingExport()
             {
                 System.Diagnostics.Debug.WriteLine($"Running Hash on SHA256, SHA512, MD5... Hashing {N / 1_000_000_000} GB...");
                 Stopwatch stopwatch = Stopwatch.StartNew();
@@ -55,9 +55,9 @@ namespace MauiBench
 
                 Dispose();
 
-                double score = 4100.0 / stopwatch.ElapsedMilliseconds * 100;
-                string result = $"Result: {score:F2} points";
-                return result;
+                long score = (long)(4100.0 / stopwatch.ElapsedMilliseconds * 100);
+                long result = score;
+                return (int)result;
             }
 
             public void Dispose()
@@ -116,7 +116,7 @@ namespace MauiBench
                 return decryptor.TransformFinalBlock(encryptedData, 0, encryptedData.Length);
             }
 
-            public string RunEncryptBenchmark()
+            public int RunEncryptBenchmark()
             {
                 int threadCount = Environment.ProcessorCount;
                 System.Diagnostics.Debug.WriteLine($"Running AES-256 Encryption... processing {TotalSize / 1_000_000_000} GB with {threadCount} threads...");
@@ -136,10 +136,10 @@ namespace MauiBench
                 System.Diagnostics.Debug.WriteLine($"Encryption completed in {stopwatch.ElapsedMilliseconds} ms.");
 
                 Dispose();
-                
-                double score = 1500.0 / stopwatch.ElapsedMilliseconds * 100;
-                string result = $"Result: {score:F2} points";
-                return result;
+
+                long score = (long)(1500.0 / stopwatch.ElapsedMilliseconds * 100);
+                long result = score;
+                return (int)result;
             }
 
             public void Dispose()
@@ -157,7 +157,7 @@ namespace MauiBench
 
         public class CPUBenchmark
         {
-            public string CpuPrimeCompute()
+            public int CpuPrimeCompute()
             {
                 int iterations;
 
@@ -190,9 +190,9 @@ namespace MauiBench
                 stopwatch.Stop();
                 System.Diagnostics.Debug.WriteLine($"Prime compute completed in {stopwatch.ElapsedMilliseconds} ms.");
 
-                double score = 6100.0 / stopwatch.ElapsedMilliseconds * 100;
-                string result = $"Result: {score:F2} points";
-                return result;
+                long score = (long)(6100.0 / stopwatch.ElapsedMilliseconds * 100);
+                long result = score;
+                return (int)result;
             }
 
             private static int ComputePrimes(int limit)
@@ -251,7 +251,7 @@ namespace MauiBench
                 }
             }
 
-            public string MultiplyMatrix()
+            public int MultiplyMatrix()
             {
                 System.Diagnostics.Debug.WriteLine($"Running Matrix Multiplication with {Environment.ProcessorCount} threads...");
                 Stopwatch stopwatch = Stopwatch.StartNew();
@@ -276,10 +276,10 @@ namespace MauiBench
 
                 stopwatch.Stop();
                 System.Diagnostics.Debug.WriteLine($"Matrix multiplication completed in {stopwatch.ElapsedMilliseconds} ms.");
-                
-                double score = 6700.0 / stopwatch.ElapsedMilliseconds * 100;
-                string benchResult = $"Result: {score:F2} points";
-                return benchResult;
+
+                long score = (long)(6700.0 / stopwatch.ElapsedMilliseconds * 100);
+                long result2 = score;
+                return (int)result2;
             }
         }
 
@@ -317,7 +317,7 @@ namespace MauiBench
                 }
             }
 
-            public string MultiplyMatrix()
+            public int MultiplyMatrix()
             {
                 System.Diagnostics.Debug.WriteLine($"Running SIMD MMUL with N={N} and VectorSize={VectorSize}, Threads={Environment.ProcessorCount}...");
                 Stopwatch stopwatch = Stopwatch.StartNew();
@@ -343,8 +343,9 @@ namespace MauiBench
                 stopwatch.Stop();
                 System.Diagnostics.Debug.WriteLine($"SIMD MMUL completed in {stopwatch.ElapsedMilliseconds} ms.");
 
-                double score = 6700.0 / stopwatch.ElapsedMilliseconds * 100;
-                return $"Result: {score:F2} points";
+                long score = (long)(6700.0 / stopwatch.ElapsedMilliseconds * 100);
+                long results = score;
+                return (int)results;
             }
         }
 
@@ -393,13 +394,33 @@ namespace MauiBench
                 BestResult = AllResults.OrderByDescending(x => x.Bandwidth).First(); // Sort for highest
                 System.Diagnostics.Debug.WriteLine($"Memory Bandwidth: {BestResult.Bandwidth:0.000} GB/s");
 
-                string benchResult = $"Result: {BestResult.Bandwidth:0.000} GB/s";
+                string benchResult = $"{BestResult.Bandwidth:0.0} GB/s";
                 return benchResult;
             }
 
             public void Dispose()
             {
                 GCHelper.CleanUp();
+            }
+        }
+
+        public class CombinedBenchmark
+        {
+            public long RunAllBenchmarks()
+            {
+                var encBenchmark = new EncryptionBenchmark();
+                var hashBenchmark = new HashingBenchmark();
+                var cpuBenchmark = new CPUBenchmark();
+                var matrixBenchmark = new MatrixMultiplicationBenchmark();
+                long results = hashBenchmark.CombinedHashingExport() +
+                                encBenchmark.RunEncryptBenchmark() +
+                                cpuBenchmark.CpuPrimeCompute() +
+                                matrixBenchmark.MultiplyMatrix();
+                var totalScore = results;
+                System.Diagnostics.Debug.WriteLine($"Total Score: {totalScore:F2} points");
+                encBenchmark.Dispose();
+                hashBenchmark.Dispose();
+                return results;
             }
         }
     }
