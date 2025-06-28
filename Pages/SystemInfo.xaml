@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiBench.Pages.SystemInfo"
+             x:Name="ThisPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="Black">
 
@@ -32,7 +33,8 @@
                         <Image Source="cpu.png" Aspect="AspectFit" HeightRequest="25" WidthRequest="25" />
                         <Label Text="CPU Information" FontSize="18" FontAttributes="Bold" VerticalOptions="Center" />
                     </HorizontalStackLayout>
-                        <ActivityIndicator x:Name="CpuSpinner" IsRunning="True" VerticalOptions="Fill" HorizontalOptions="Fill" />
+                    <!--IsVisible="{Binding IsLoading, Source={x:Reference ThisPage}}"-->
+                    <ActivityIndicator x:Name="CpuSpinner" IsRunning="True" VerticalOptions="Fill" HorizontalOptions="Fill"/>
                 </VerticalStackLayout>
             </ScrollView>
         </Border>
@@ -58,7 +60,7 @@
                         <Image Source="gpu.png" Aspect="AspectFit" HeightRequest="25" WidthRequest="25" />
                         <Label Text="GPU Information" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
                     </HorizontalStackLayout>
-                    <ActivityIndicator x:Name="GpuSpinner" IsRunning="True" VerticalOptions="Fill" HorizontalOptions="Fill" />
+                    <ActivityIndicator x:Name="GpuSpinner" IsRunning="True" VerticalOptions="Fill" HorizontalOptions="Fill"/>
                 </VerticalStackLayout>
             </ScrollView>
         </Border>

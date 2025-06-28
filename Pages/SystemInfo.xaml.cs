@@ -102,7 +102,7 @@ public partial class SystemInfo : ContentPage
                     var bandwidth = memoryClockMHz * 2 * gpu.MemoryInformation.FrameBufferBandwidth / 8000.0;
                     AddGpuInfoItem($"Bandwidth: {bandwidth} GB/s");
 
-                    AddDivider();
+                    AddDivider(GpuInfoContainer);
                 }
             }
             catch (Exception ex)
@@ -124,7 +124,7 @@ public partial class SystemInfo : ContentPage
                 AddGpuInfoItem($"Name: {item["Name"]}");
                 AddGpuInfoItem($"Manufacturer: {manufacturer}");
                 AddGpuInfoItem($"VRAM: {Convert.ToUInt64(item["AdapterRAM"]) / (1024 * 1024)} MB");
-                AddDivider();
+                AddDivider(GpuInfoContainer);
             }
             else
             {
@@ -156,7 +156,7 @@ public partial class SystemInfo : ContentPage
                             AddGpuInfoItem($"Shared Memory: {desc.SharedSystemMemory / (1024 * 1024)} MB");
                         }
 
-                        AddDivider();
+                        AddDivider(GpuInfoContainer);
                     }
                     catch (Exception ex)
                     {
@@ -245,7 +245,6 @@ public partial class SystemInfo : ContentPage
             return;
         }
 
-        // Only supported on Windows
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             AddMemInfoItem("Memory Information not available on this platform", isHeader: true);
@@ -255,7 +254,6 @@ public partial class SystemInfo : ContentPage
         try
         {
             HasMemorySpecsBeenGathered = true;
-            // Query physical memory modules
             using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PhysicalMemory");
             var modules = searcher.Get().Cast<ManagementObject>().ToList();
 
@@ -277,7 +275,6 @@ public partial class SystemInfo : ContentPage
                 if (manufacturer is null)
                     manufacturer = module["Manufacturer"]?.ToString()?.Trim();
 
-                // Capture the first valid speed and bus width
                 if (speed == 0 && int.TryParse(module["Speed"]?.ToString()?.Trim(), out var parsedSpeed))
                     speed = parsedSpeed;
 
@@ -292,14 +289,12 @@ public partial class SystemInfo : ContentPage
             {
                 AddMemInfoItem($"Slot {slot++}", isHeader: true);
 
-                // Speed
                 if (module["Speed"]?.ToString() is string s && s != "0")
                     AddMemInfoItem($"Speed: {s.Trim()} MHz");
 
-                // Capacity
                 var cap = Convert.ToInt64(module["Capacity"]);
                 AddMemInfoItem($"Capacity: {cap / (1024 * 1024 * 1024)} GB");
-                AddMemoryDivider();
+                AddDivider(MemoryInfoContainer);
             }
 
             // Summary
@@ -320,7 +315,6 @@ public partial class SystemInfo : ContentPage
         var label = new Label
         {
             Text = text,
-            //TextColor = isHeader ? Colors.DarkCyan : Colors.Black,
             FontAttributes = isHeader ? FontAttributes.Bold : FontAttributes.None,
             FontSize = isHeader ? 16 : 14,
             Margin = new Thickness(isHeader ? 0 : 5, 2, 0, 2)
@@ -342,7 +336,7 @@ public partial class SystemInfo : ContentPage
         CpuInfoContainer.Add(label);
     }
 
-    private void AddDivider()
+    private void AddDivider(VerticalStackLayout parent)
     {
         var boxView = new BoxView
         {
@@ -352,7 +346,7 @@ public partial class SystemInfo : ContentPage
             HorizontalOptions = LayoutOptions.Fill
         };
 
-        GpuInfoContainer.Add(boxView);
+        parent.Add(boxView);
     }
 
     private void AddMemInfoItem(string text, bool isHeader = false)
@@ -366,32 +360,5 @@ public partial class SystemInfo : ContentPage
         };
 
         MemoryInfoContainer.Add(label);
-    }
-
-    private void AddMemoryDivider()
-    {
-        var boxView = new BoxView
-        {
-            HeightRequest = 1,
-            Color = Colors.LightGray,
-            Margin = new Thickness(0, 10, 0, 10),
-            HorizontalOptions = LayoutOptions.Fill
-        };
-
-        MemoryInfoContainer.Add(boxView);
-    }
-
-    private string FormatBytes(ulong bytes)
-    {
-        string[] suffix = { "B", "KB", "MB", "GB", "TB" };
-        int i;
-        double dblBytes = bytes;
-
-        for (i = 0; i < suffix.Length && bytes >= 1024; i++, bytes /= 1024)
-        {
-            dblBytes = bytes / 1024.0;
-        }
-
-        return $"{dblBytes:0.##} {suffix[i]}";
     }
 }
