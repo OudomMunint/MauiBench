@@ -57,6 +57,15 @@ namespace MauiBench.Data
             return Database.DeleteAllAsync<BenchmarkModel>();
         }
 
+        public Task<int> DeleteItemAsync(BenchmarkModel item)
+        {
+            if (Database == null)
+            {
+                throw new InvalidOperationException("Database connection is not initialized.");
+            }
+            return Database.DeleteAsync(item);
+        }
+
         public Task<int> SaveItemAsync(BenchmarkModel item)
         {
             if (Database == null)
