@@ -43,6 +43,8 @@ namespace MauiBench.Models
 
         public int? Result { get; set; }
 
+        public string? Version { get; set; }
+
         public string FormattedResult
         {
             get

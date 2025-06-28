@@ -17,10 +17,14 @@ namespace MauiBench
                     fonts.AddFont("Inter-Regular.ttf", "InterRegular");
                     fonts.AddFont("Inter-SemiBold.ttf", "InterSemiBold");
                     fonts.AddFont("Inter-Bold.ttf", "InterBold");
+                })
+                .ConfigureEssentials(essentials =>
+                {
+                    essentials.UseVersionTracking();
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

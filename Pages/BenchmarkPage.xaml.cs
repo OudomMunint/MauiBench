@@ -15,11 +15,17 @@ public partial class BenchmarkPage : ContentPage
     {
         InitializeComponent();
         InitializeDatabaseAsync();
+        SetVersionAndTitle();
     }
 
     private async void InitializeDatabaseAsync()
     {
         database = await ItemDatabase.Instance;
+    }
+
+    private void SetVersionAndTitle()
+    {
+        TitleLabel.Text = $"MauiBench v{VersionTracking.Default.CurrentVersion}";
     }
 
     private async void HashingBenchmarkButton_Clicked(object sender, EventArgs e)
@@ -59,7 +65,8 @@ public partial class BenchmarkPage : ContentPage
             Timestamp = DateTime.Now,
             TestNameValue = BenchmarkModel.TestName.Hashing,
             BenchmarkType = BenchmarkModel.Type.Full,
-            Result = thisbenchmarkResults
+            Result = thisbenchmarkResults,
+            Version = $"v{VersionTracking.Default.CurrentVersion}",
         });
     }
 
@@ -100,7 +107,8 @@ public partial class BenchmarkPage : ContentPage
             Timestamp = DateTime.Now,
             TestNameValue = BenchmarkModel.TestName.Encryption,
             BenchmarkType = BenchmarkModel.Type.Partial,
-            Result = thisbenchmarkResults
+            Result = thisbenchmarkResults,
+            Version = $"v{VersionTracking.Default.CurrentVersion}",
         });
     }
 
@@ -141,7 +149,8 @@ public partial class BenchmarkPage : ContentPage
             Timestamp = DateTime.Now,
             TestNameValue = BenchmarkModel.TestName.Prime,
             BenchmarkType = BenchmarkModel.Type.Partial,
-            Result = thisbenchmarkResults
+            Result = thisbenchmarkResults,
+            Version = $"v{VersionTracking.Default.CurrentVersion}",
         });
     }
 
@@ -182,7 +191,8 @@ public partial class BenchmarkPage : ContentPage
             Timestamp = DateTime.Now,
             TestNameValue = BenchmarkModel.TestName.MatrixMultiplication,
             BenchmarkType = BenchmarkModel.Type.Partial,
-            Result = thisbenchmarkResults
+            Result = thisbenchmarkResults,
+            Version = $"v{VersionTracking.Default.CurrentVersion}",
         });
     }
 
@@ -222,7 +232,8 @@ public partial class BenchmarkPage : ContentPage
             Timestamp = DateTime.Now,
             TestNameValue = BenchmarkModel.TestName.MemoryBandwidth,
             BenchmarkType = BenchmarkModel.Type.Partial,
-            BandwidthResult = thisbenchmarkResults
+            BandwidthResult = thisbenchmarkResults,
+            Version = $"v{VersionTracking.Default.CurrentVersion}",
         });
     }
 
@@ -261,7 +272,8 @@ public partial class BenchmarkPage : ContentPage
             Timestamp = DateTime.Now,
             TestNameValue = BenchmarkModel.TestName.Full,
             BenchmarkType = BenchmarkModel.Type.Full,
-            Result = thisbenchmarkResults
+            Result = thisbenchmarkResults,
+            Version = $"v{VersionTracking.Default.CurrentVersion}",
         });
     }
 }

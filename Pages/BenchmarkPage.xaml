@@ -30,6 +30,7 @@
 
     <Grid Padding="20" RowSpacing="30" ColumnSpacing="30">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -38,9 +39,12 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        
+        <!--Title + Version-->
+        <Label x:Name="TitleLabel" Grid.Row="0" Grid.Column="1" FontSize="Title" HorizontalOptions="Center" TextDecorations="Underline" />
 
         <!-- Hashing Benchmark -->
-        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CustomBorder}">
+        <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource CustomBorder}">
             <ScrollView>
                 <VerticalStackLayout x:Name="HashingContainer" Spacing="10" Padding="10">
                     <Label Text="Hashing Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
@@ -54,7 +58,7 @@
         </Border>
 
         <!-- Encryption Benchmark -->
-        <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource CustomBorder}">
+        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource CustomBorder}">
             <ScrollView>
                 <VerticalStackLayout x:Name="EncryptionContainer" Spacing="10" Padding="10">
                     <Label Text="Encryption Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
@@ -68,7 +72,7 @@
         </Border>
 
         <!-- Prime Number Benchmark -->
-        <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource CustomBorder}">
+        <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource CustomBorder}">
             <ScrollView>
                 <VerticalStackLayout x:Name="PrimeContainer" Spacing="10" Padding="10">
                     <Label Text="Prime Number Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
@@ -82,7 +86,7 @@
         </Border>
 
         <!-- Matrix Multiply Benchmark -->
-        <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource CustomBorder}">
+        <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource CustomBorder}">
             <ScrollView>
                 <VerticalStackLayout x:Name="MatrixContainer" Spacing="10" Padding="10">
                     <Label Text="Matrix Multiply Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
@@ -96,7 +100,7 @@
         </Border>
 
         <!-- Memory Benchmark -->
-        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource CustomBorder}">
+        <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource CustomBorder}">
             <ScrollView>
                 <VerticalStackLayout x:Name="MemoryContainer" Spacing="10" Padding="10">
                     <Label Text="Memory Benchmark" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
@@ -110,7 +114,7 @@
         </Border>
 
         <!-- All Benchmarks -->
-        <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource CustomBorder}">
+        <Border Grid.Row="2" Grid.Column="2" Style="{StaticResource CustomBorder}">
             <ScrollView>
                 <VerticalStackLayout x:Name="AllContainer" Spacing="10" Padding="10">
                     <Label Text="All Benchmarks" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
