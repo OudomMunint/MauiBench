@@ -9,14 +9,14 @@
     Title="MauiBench">
 
     <TabBar>
-        <Tab x:Name="BenchmarkPage" Title="Benchmarks" Icon="speedom.png">
-            <ShellContent Title="Benchmarks" ContentTemplate="{DataTemplate pages:BenchmarkPage}" Icon="speedom.png" />
+        <Tab x:Name="BenchmarkPage" Title="Benchmarks">
+            <ShellContent Title="Benchmarks" ContentTemplate="{DataTemplate pages:BenchmarkPage}" />
         </Tab>
-        <Tab x:Name="ResultsPage" Title="Results" Icon="results.png">
-            <ShellContent Title="Results" ContentTemplate="{DataTemplate pages:ResultsPage}" Icon="results.png" />
+        <Tab x:Name="ResultsPage" Title="Results">
+            <ShellContent Title="Results" ContentTemplate="{DataTemplate pages:ResultsPage}" />
         </Tab>
-        <Tab x:Name="SystemInfo" Title="System Info" Icon="info.png">
-            <ShellContent Title="System Info" ContentTemplate="{DataTemplate pages:SystemInfo}" Icon="info.png" />
+        <Tab x:Name="SystemInfo" Title="System Info">
+            <ShellContent Title="System Info" ContentTemplate="{DataTemplate pages:SystemInfo}" />
         </Tab>
     </TabBar>
 </Shell>
