@@ -2,14 +2,11 @@
 ### A .Net MAUI application that evaluates CPU performance & provides information about your CPU, GPU, RAM.
 
 ## ❌ macOS Support Notice
+### Known Performance on macOS (Intel & Apple Silicon)
 
-> **macOS (MAUI/Catalyst) is not currently supported.**  
->
-> This application relies on high-performance compute workloads using `.NET` SIMD (`System.Numerics.Vector<T>`) and multithreaded processing.  
-> While Windows and Linux builds use **CoreCLR** (with full JIT-optimized NEON/AVX2 + FMA support), the macOS MAUI host runs on **Mono/AOT**, which does **not** JIT-compile SIMD code down to hardware instructions.  
-> This results in severe performance degradation on both Intel-based and Apple Silicon (ARM64) Macs.
-> Therefore not a fair test for macOS. <br> One can still run the application on macOS as .NET MAUI is platform-agnostic, but the performance results will be significantly lower than expected. <br>
-> I have made a seperate benchmarking tool that doesn't have the overhead of .NET MAUI, which can be found [here](https://github.com/OudomMunint/Benchmark).
+> ⚠️ **Note:** On macOS Catalyst (Mono runtime), runs noticeably slower than in a standalone .NET Core console app.
+> This applies both to Intel Macs (native x64 Mono JIT) and Apple Silicon (ARM64 Mono AOT/JIT),
+> because Mono’s codegen and GC are tuned more for quick startup than raw floating‑point throughput.
 
 # Test suite
 - 🔢 Integer Performance – Prime number computation.
