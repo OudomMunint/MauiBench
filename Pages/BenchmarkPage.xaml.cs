@@ -68,6 +68,10 @@ public partial class BenchmarkPage : ContentPage
             Result = thisbenchmarkResults,
             Version = $"v{VersionTracking.Default.CurrentVersion}",
         });
+
+        Utilities.BenchmarkExporter.ExportResults("MauiBench_Results.txt", thisbenchmarkResults.ToString(), "Hashing Test",
+            $"{VersionTracking.Default.CurrentVersion}",
+            DateTime.Now.ToString());
     }
 
     private async void EncryptionBenchmarkButton_Clicked(object sender, EventArgs e)
@@ -110,6 +114,10 @@ public partial class BenchmarkPage : ContentPage
             Result = thisbenchmarkResults,
             Version = $"v{VersionTracking.Default.CurrentVersion}",
         });
+
+        Utilities.BenchmarkExporter.ExportResults("MauiBench_Results.txt", thisbenchmarkResults.ToString(), "Encryption Test",
+            $"{VersionTracking.Default.CurrentVersion}",
+            DateTime.Now.ToString());
     }
 
     private async void PrimeBenchmarkButton_Clicked(object sender, EventArgs e)
@@ -152,6 +160,10 @@ public partial class BenchmarkPage : ContentPage
             Result = thisbenchmarkResults,
             Version = $"v{VersionTracking.Default.CurrentVersion}",
         });
+
+        Utilities.BenchmarkExporter.ExportResults("MauiBench_Results.txt", thisbenchmarkResults.ToString(), "Prime Compute Test",
+            $"{VersionTracking.Default.CurrentVersion}",
+            DateTime.Now.ToString());
     }
 
     private async void MatrixBenchmarkButton_Clicked(object sender, EventArgs e)
@@ -194,6 +206,10 @@ public partial class BenchmarkPage : ContentPage
             Result = thisbenchmarkResults,
             Version = $"v{VersionTracking.Default.CurrentVersion}",
         });
+
+        Utilities.BenchmarkExporter.ExportResults("MauiBench_Results.txt", thisbenchmarkResults.ToString(), "Matrix Multiplication Test",
+            $"{VersionTracking.Default.CurrentVersion}",
+            DateTime.Now.ToString());
     }
 
     private async void MemoryBenchmarkButton_Clicked(object sender, EventArgs e)
@@ -262,11 +278,13 @@ public partial class BenchmarkPage : ContentPage
         AllResultsLabel.Text = $"{thisbenchmarkResults} points";
         AllSpinner.IsRunning = false;
         AllSpinner.IsVisible = false;
+
         if (button != null)
         {
             button.IsEnabled = true;
             button.Text = "Start Benchmark";
         }
+
         await database.SaveItemAsync(new BenchmarkModel
         {
             Timestamp = DateTime.Now,
@@ -275,5 +293,9 @@ public partial class BenchmarkPage : ContentPage
             Result = thisbenchmarkResults,
             Version = $"v{VersionTracking.Default.CurrentVersion}",
         });
+
+        Utilities.BenchmarkExporter.ExportResults("MauiBench_Results.txt", thisbenchmarkResults.ToString(), "Combined Test",
+            $"{VersionTracking.Default.CurrentVersion}",
+            DateTime.Now.ToString());
     }
 }
