@@ -45,6 +45,7 @@ jobs:
       - name: Install MAUI Workloads
         run: |
           dotnet workload install maui --ignore-failed-sources
+          dotnet workload install macos --ignore-failed-sources
           dotnet workload list
 
       - name: Build MAUI macOS
