@@ -31,25 +31,25 @@ jobs:
           dotnet build Mauibench.csproj -c Release -f net9.0-windows10.0.19041.0
 
   build-macos:
-    runs-on: macos-latest
-    name: macOS Build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  runs-on: macos-15
+  name: macOS Build
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Setup .NET 9
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.x
+    - name: Setup .NET 9
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.x
 
-      - name: Install MAUI Workloads
-        run: |
-          dotnet workload install maui-macos --ignore-failed-sources
-          dotnet workload list
+    - name: Install MAUI Workloads
+      run: |
+        dotnet workload install maui --ignore-failed-sources
+        dotnet workload list
 
-      - name: Build MAUI macOS
-        run: |
-          dotnet build Mauibench.csproj -c Release -f net9.0-macos
+    - name: Build MAUI macOS
+      run: |
+        dotnet build Mauibench.csproj -c Release -f net9.0-macos13
 
   release:
     needs: [build-windows, build-macos]
@@ -58,4 +58,4 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1.14.0
         with:
-          tag: v1.0.0
+          tag: v1.0.1
