@@ -47,7 +47,7 @@ public partial class ResultsPage : ContentPage
     private async void DeleteButton_Clicked(object sender, EventArgs e)
     {
         ItemDatabase database = await ItemDatabase.Instance;
-        var result = await DisplayAlert("Delete All", "Are you sure you want to delete all benchmark results?", "Yes", "No");
+        var result = await DisplayAlertAsync("Delete All", "Are you sure you want to delete all benchmark results?", "Yes", "No");
         if (result)
         {
             await database.DeleteAllItemsAsync();

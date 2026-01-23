@@ -1,4 +1,5 @@
 using Hardware.Info;
+using MauiBench.Helpers;
 using Microsoft.Maui.Graphics;
 using NvAPIWrapper;
 using NvAPIWrapper.GPU;
@@ -85,6 +86,7 @@ public partial class SystemInfo : ContentPage
                     AddGpuInfoItem($"Core: {gpu.ArchitectInformation.ShortName}");
                     AddGpuInfoItem($"Shaders: {gpu.ArchitectInformation.NumberOfCores}");
                     AddGpuInfoItem($"ROPs: {gpu.ArchitectInformation.NumberOfROPs}");
+                    AddGpuInfoItem($"Node: {NodeHelper.GetProcessNode(gpu.ArchitectInformation.ShortName)}");
 
                     var graphicsClockMHz = gpu.BoostClockFrequencies.GraphicsClock.Frequency / 1000;
                     AddGpuInfoItem($"Core Clock: {graphicsClockMHz} MHz");
@@ -145,6 +147,7 @@ public partial class SystemInfo : ContentPage
                         AddGpuInfoItem($"Name: {desc.Description}");
                         AddGpuInfoItem($"Manufacturer: {manufacturer}");
                         AddGpuInfoItem($"Driver Version: {item["DriverVersion"]}");
+                        AddGpuInfoItem($"Process Node: {NodeHelper.GetProcessNodeAMD(desc.Description)}");
 
                         if (desc.DedicatedVideoMemory == 0)
                         {
