@@ -58,7 +58,7 @@ jobs:
 
       - name: Build MAUI macOS
         run: |
-          dotnet build Mauibench.csproj -c Release -f net10.0-maccatalyst
+          dotnet build Mauibench.csproj -c Release -f net10.0-maccatalyst15.0
           
   release:
     needs: [build-windows, build-macos]
