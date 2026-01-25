@@ -35,7 +35,7 @@ jobs:
           dotnet build Mauibench.csproj -c Release -f net10.0-windows10.0.19041.0
 
   build-macos:
-    runs-on: macos-15
+    runs-on: macos-26
     name: macOS Build
     steps:
       - name: Checkout
@@ -55,6 +55,9 @@ jobs:
       - name: Dotnet Workload Restore
         run: |
           dotnet workload restore Mauibench.csproj
+
+      - name: Select Xcode 26
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app
 
       - name: Build MAUI macOS
         run: |
