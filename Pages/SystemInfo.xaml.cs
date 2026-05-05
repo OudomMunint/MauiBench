@@ -11,6 +11,20 @@ namespace MauiBench.Pages;
 
 public partial class SystemInfo : ContentPage
 {
+    private readonly record struct InfoItem(string Text, bool IsHeader, bool IsDivider);
+
+    private static List<InfoItem>? CachedGpuInfoItems;
+
+    private static List<InfoItem>? CachedCpuInfoItems;
+
+    private static List<InfoItem>? CachedMemoryInfoItems;
+
+    private List<InfoItem>? gpuCapture;
+
+    private List<InfoItem>? cpuCapture;
+
+    private List<InfoItem>? memoryCapture;
+
     private bool HasCpuSpecsBeenGathered = false;
 
     private bool HasGpuSpecsBeenGathered = false;
@@ -50,12 +64,22 @@ public partial class SystemInfo : ContentPage
             return;
         }
 
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        if (CachedGpuInfoItems is not null)
         {
-            AddGpuInfoItem("GPU Information not available on this platform", isHeader: true);
+            RenderCachedItems(CachedGpuInfoItems, GpuInfoContainer);
+            HasGpuSpecsBeenGathered = true;
             return;
         }
 
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            AddGpuInfoItem("GPU Information not available on this platform", isHeader: true);
+            CachedGpuInfoItems = new List<InfoItem> { new("GPU Information not available on this platform", true, false) };
+            HasGpuSpecsBeenGathered = true;
+            return;
+        }
+
+        gpuCapture = new List<InfoItem>();
         HasGpuSpecsBeenGathered = true;
         using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController");
         bool hasNvidiaGPU = false;
@@ -167,6 +191,9 @@ public partial class SystemInfo : ContentPage
                     }
                 }
             }
+
+        CachedGpuInfoItems = gpuCapture;
+        gpuCapture = null;
         }
     }
 
@@ -177,12 +204,22 @@ public partial class SystemInfo : ContentPage
             return;
         }
 
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        if (CachedCpuInfoItems is not null)
         {
-            AddCpuInfoItem("CPU Information not available on this platform", isHeader: true);
+            RenderCachedItems(CachedCpuInfoItems, CpuInfoContainer);
+            HasCpuSpecsBeenGathered = true;
             return;
         }
 
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            AddCpuInfoItem("CPU Information not available on this platform", isHeader: true);
+            CachedCpuInfoItems = new List<InfoItem> { new("CPU Information not available on this platform", true, false) };
+            HasCpuSpecsBeenGathered = true;
+            return;
+        }
+
+        cpuCapture = new List<InfoItem>();
         try
         {
             HasCpuSpecsBeenGathered = true;
@@ -239,6 +276,9 @@ public partial class SystemInfo : ContentPage
         {
             AddCpuInfoItem($"Error retrieving CPU info: {ex.Message}");
         }
+
+        CachedCpuInfoItems = cpuCapture;
+        cpuCapture = null;
     }
 
     private void GetMemoryInfo()
@@ -248,12 +288,22 @@ public partial class SystemInfo : ContentPage
             return;
         }
 
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        if (CachedMemoryInfoItems is not null)
         {
-            AddMemInfoItem("Memory Information not available on this platform", isHeader: true);
+            RenderCachedItems(CachedMemoryInfoItems, MemoryInfoContainer);
+            HasMemorySpecsBeenGathered = true;
             return;
         }
 
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            AddMemInfoItem("Memory Information not available on this platform", isHeader: true);
+            CachedMemoryInfoItems = new List<InfoItem> { new("Memory Information not available on this platform", true, false) };
+            HasMemorySpecsBeenGathered = true;
+            return;
+        }
+
+        memoryCapture = new List<InfoItem>();
         try
         {
             HasMemorySpecsBeenGathered = true;
@@ -311,6 +361,9 @@ public partial class SystemInfo : ContentPage
         {
             AddMemInfoItem($"Error retrieving memory info: {ex.Message}");
         }
+
+        CachedMemoryInfoItems = memoryCapture;
+        memoryCapture = null;
     }
 
     private void AddGpuInfoItem(string text, bool isHeader = false)
@@ -324,6 +377,7 @@ public partial class SystemInfo : ContentPage
         };
 
         GpuInfoContainer.Add(label);
+        gpuCapture?.Add(new InfoItem(text, isHeader, false));
     }
 
     private void AddCpuInfoItem(string text, bool isHeader = false)
@@ -337,6 +391,7 @@ public partial class SystemInfo : ContentPage
         };
 
         CpuInfoContainer.Add(label);
+        cpuCapture?.Add(new InfoItem(text, isHeader, false));
     }
 
     private void AddDivider(VerticalStackLayout parent)
@@ -350,6 +405,15 @@ public partial class SystemInfo : ContentPage
         };
 
         parent.Add(boxView);
+
+        if (ReferenceEquals(parent, GpuInfoContainer))
+        {
+            gpuCapture?.Add(new InfoItem(string.Empty, false, true));
+        }
+        else if (ReferenceEquals(parent, MemoryInfoContainer))
+        {
+            memoryCapture?.Add(new InfoItem(string.Empty, false, true));
+        }
     }
 
     private void AddMemInfoItem(string text, bool isHeader = false)
@@ -363,5 +427,30 @@ public partial class SystemInfo : ContentPage
         };
 
         MemoryInfoContainer.Add(label);
+        memoryCapture?.Add(new InfoItem(text, isHeader, false));
+    }
+
+    private void RenderCachedItems(IReadOnlyList<InfoItem> items, VerticalStackLayout container)
+    {
+        container.Children.Clear();
+
+        foreach (var item in items)
+        {
+            if (item.IsDivider)
+            {
+                AddDivider(container);
+                continue;
+            }
+
+            var label = new Label
+            {
+                Text = item.Text,
+                FontAttributes = item.IsHeader ? FontAttributes.Bold : FontAttributes.None,
+                FontSize = item.IsHeader ? 16 : 14,
+                Margin = new Thickness(item.IsHeader ? 0 : 5, 2, 0, 2)
+            };
+
+            container.Add(label);
+        }
     }
 }
