@@ -38,7 +38,7 @@ namespace MauiBench.Helpers
             if (Regex.IsMatch(gpuName, @"RX\s+7\d{3}"))
                 return "TSMC 5nm";
 
-            if (Regex.IsMatch(gpuName, @"RX\s+8\d{3}"))
+            if (Regex.IsMatch(gpuName, @"RX\s+9\d{3}"))
                 return "TSMC 4nm";
 
             return "Unknown";

@@ -26,12 +26,16 @@ jobs:
           dotnet workload install maui-windows --ignore-failed-sources
           dotnet workload list
 
+      - name: Dotnet Workload Restore
+        run: |
+          dotnet workload restore Mauibench.csproj
+
       - name: Build MAUI Windows
         run: |
           dotnet build Mauibench.csproj -c Release -f net10.0-windows10.0.19041.0
 
   build-macos:
-    runs-on: macos-15
+    runs-on: macos-26
     name: macOS Build
     steps:
       - name: Checkout
@@ -48,10 +52,17 @@ jobs:
           dotnet workload install macos --ignore-failed-sources
           dotnet workload list
 
+      - name: Dotnet Workload Restore
+        run: |
+          dotnet workload restore Mauibench.csproj
+
+      - name: Select Xcode 26
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app
+
       - name: Build MAUI macOS
         run: |
-          dotnet build Mauibench.csproj -c Release -f net10.0-macos15
-
+          dotnet build Mauibench.csproj -c Release -f net10.0-maccatalyst
+          
   release:
     needs: [build-windows, build-macos]
     runs-on: ubuntu-latest
