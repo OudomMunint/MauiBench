@@ -35,7 +35,7 @@ jobs:
           dotnet build Mauibench.csproj -c Release -f net10.0-windows10.0.19041.0
 
   build-macos:
-    runs-on: macos-26
+    runs-on: macos-latest
     name: macOS Build
     steps:
       - name: Checkout
